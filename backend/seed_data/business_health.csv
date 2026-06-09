@@ -1,0 +1,9 @@
+domain,status,tooltip_title,tooltip_description,sort_order
+store,healthy,Store Healthy,All systems operational. 187 orders processed today. Uptime 99.9%.,1
+payments,warning,Payment Decline Rate,"Payment decline rate at 3.2%, up from 1.5% baseline. Primarily AT/CH credit cards.",2
+inventory,critical,Stock Alert,"2 products below safety stock: Running Shoes Pro (38 units), Travel Backpack (18 units).",3
+fulfillment,healthy,Fulfillment on Track,Average fulfillment time: 1.8 days. All orders shipped within SLA.,4
+advertising,warning,Ad Spend Concern,"Brand Awareness EU campaign ROAS at 1.1x, below 2.0x target. €1,240 at risk over 14 days.",5
+listings,warning,Listing Issue,1 product listing suppressed on marketplace: Travel Backpack (PROD-020). Missing dimension data.,6
+customer_feedback,healthy,Feedback Positive,Average rating: 4.6/5 across 342 reviews this month. No negative trends detected.,7
+returns,warning,Returns Elevated,"Phone Case Classic refund rate spiked to 12%, up from 4% average. 23 returns in 14 days.",8

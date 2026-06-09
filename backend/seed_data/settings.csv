@@ -1,0 +1,13 @@
+setting_key,setting_value,label,category
+low_stock_threshold,50,Low Stock Threshold,thresholds
+critical_stock_threshold,20,Critical Stock Threshold,thresholds
+min_roas_target,2.0,Minimum ROAS Target,thresholds
+max_acos_target,0.35,Maximum ACoS Target,thresholds
+refund_rate_threshold,5.0,Refund Rate Alert (%),thresholds
+payment_decline_threshold,2.5,Payment Decline Alert (%),thresholds
+default_currency,EUR,Default Currency,display
+default_date_range,last_30_days,Default Date Range,display
+dashboard_refresh_interval,300,Dashboard Refresh (seconds),display
+enable_email_alerts,false,Email Alerts,notifications
+enable_slack_alerts,false,Slack Alerts,notifications
+alert_email_address,,Alert Email Address,notifications

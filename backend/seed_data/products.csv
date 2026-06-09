@@ -1,0 +1,21 @@
+product_id,product_name,category,brand,unit_price,cost_price,stock_quantity,is_active
+PROD-001,Wireless Headphones,Electronics,SoundMax,49.99,22.0,150,True
+PROD-002,Bluetooth Speaker,Electronics,SoundMax,79.99,35.0,210,True
+PROD-003,USB-C Charging Cable,Electronics,TechLine,9.99,2.5,1200,True
+PROD-004,Laptop Stand,Electronics,DeskPro,34.99,14.0,95,True
+PROD-005,Phone Case - Classic,Accessories,CoverUp,12.5,3.2,800,True
+PROD-006,Phone Case - Premium,Accessories,CoverUp,24.99,8.0,320,True
+PROD-007,Leather Wallet,Accessories,UrbanCraft,39.99,15.0,175,True
+PROD-008,Sunglasses - Aviator,Accessories,StyleVue,29.99,10.0,260,True
+PROD-009,Running Shoes - Pro,Footwear,FastStep,89.0,35.0,38,True
+PROD-010,Trail Hiking Boots,Footwear,FastStep,119.0,48.0,85,True
+PROD-011,Casual Sneakers,Footwear,UrbanStep,59.99,22.0,190,True
+PROD-012,Cotton T-Shirt,Clothing,BasicWear,19.99,6.0,450,True
+PROD-013,Slim Fit Jeans,Clothing,DenimCo,49.99,18.0,280,True
+PROD-014,Hoodie - Oversized,Clothing,UrbanWear,44.99,16.0,310,True
+PROD-015,Winter Jacket,Clothing,NordStyle,129.0,52.0,65,True
+PROD-016,Yoga Mat,Home,FitLife,29.99,10.0,340,True
+PROD-017,Stainless Water Bottle,Home,EcoFlow,19.99,5.5,520,True
+PROD-018,Scented Candle Set,Home,AromaHome,24.99,8.0,180,True
+PROD-019,Desk Organizer,Home,DeskPro,22.99,7.5,145,True
+PROD-020,Backpack - Travel,Accessories,UrbanCraft,69.99,28.0,18,True
