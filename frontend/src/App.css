@@ -1,4 +1,4 @@
-/* App-level layout */
+/* App-level layout — sidebar offset matches Figma 76px sidebar width */
 .main-content {
-  margin-left: 44px;
+  margin-left: 56px;
 }
