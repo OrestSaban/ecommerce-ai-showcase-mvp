@@ -191,6 +191,20 @@
   flex-shrink: 0;
 }
 
+/* Tint arrow SVG to match the semantic color of the percentage */
+.db-kpi-arrow--up {
+  /* green #16a34a */
+  filter: brightness(0) saturate(100%) invert(43%) sepia(98%) saturate(360%) hue-rotate(101deg) brightness(92%);
+}
+.db-kpi-arrow--down {
+  /* red #e60f0f */
+  filter: brightness(0) saturate(100%) invert(14%) sepia(97%) saturate(6080%) hue-rotate(4deg) brightness(97%);
+}
+.db-kpi-arrow--warning {
+  /* orange #fc8e05 — matched to text color */
+  filter: brightness(0) saturate(100%) invert(55%) sepia(100%) saturate(900%) hue-rotate(5deg) brightness(108%);
+}
+
 .db-kpi-change-pct {
   font-family: 'Inter', sans-serif;
   font-weight: 700;

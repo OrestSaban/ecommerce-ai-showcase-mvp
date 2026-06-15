@@ -23,6 +23,9 @@ function KPICard({ label, value, dot, changeValue, changeDir, changeColor }) {
   if (changeDir === 'down') arrowIcon = ArrowDown;
   if (changeDir === 'warning') arrowIcon = ArrowWarning;
 
+  // colorClass drives both arrow tint and percentage text color
+  const colorClass = changeColor || changeDir;
+
   return (
     <div className="db-kpi-card">
       {/* TOP: title + status dot */}
@@ -37,8 +40,8 @@ function KPICard({ label, value, dot, changeValue, changeDir, changeColor }) {
       {/* BOTTOM: comparison block — two separate lines */}
       <div className="db-kpi-bottom">
         <div className="db-kpi-change-main">
-          <img src={arrowIcon} alt="" className="db-kpi-arrow" />
-          <span className={`db-kpi-change-pct ${changeColor || changeDir}`}>{changeValue}</span>
+          <img src={arrowIcon} alt="" className={`db-kpi-arrow db-kpi-arrow--${colorClass}`} />
+          <span className={`db-kpi-change-pct ${colorClass}`}>{changeValue}</span>
         </div>
         <span className="db-kpi-change-text">vs prior period</span>
       </div>
