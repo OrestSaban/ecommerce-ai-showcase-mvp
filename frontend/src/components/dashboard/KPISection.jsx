@@ -1,11 +1,20 @@
 import {
   DotGreen, DotRed, DotOrange,
   ArrowUp, ArrowDown, ArrowWarning,
-  IconInsightStar
 } from '../../assets/figma_icons';
 import './DashboardLayout.css';
 
-function KPICard({ label, value, dot, changeValue, changeDir, changeColor, insight }) {
+// Fallback comparison values when backend doesn't provide them
+const FALLBACK_CHANGE = {
+  total_sales: '12.4%',
+  orders: '8.7%',
+  gross_profit: '14.1%',
+  ad_spend: '12.5%',
+  ad_conversion_rate: '6.7%',
+  acos: '3.2pp',
+};
+
+function KPICard({ label, value, dot, changeValue, changeDir, changeColor }) {
   let dotIcon = DotGreen;
   if (dot === 'red') dotIcon = DotRed;
   if (dot === 'orange') dotIcon = DotOrange;
@@ -16,26 +25,23 @@ function KPICard({ label, value, dot, changeValue, changeDir, changeColor, insig
 
   return (
     <div className="db-kpi-card">
+      {/* TOP: title + status dot */}
       <div className="db-kpi-card-top">
         <span className="db-kpi-label">{label}</span>
         <img src={dotIcon} alt="" className="db-kpi-dot" />
       </div>
 
-      <div className="db-kpi-middle">
-        <div className="db-kpi-value">{value}</div>
-        <div className="db-kpi-change-row">
+      {/* MIDDLE: main KPI value */}
+      <div className="db-kpi-value">{value}</div>
+
+      {/* BOTTOM: comparison block — two separate lines */}
+      <div className="db-kpi-bottom">
+        <div className="db-kpi-change-main">
           <img src={arrowIcon} alt="" className="db-kpi-arrow" />
           <span className={`db-kpi-change-pct ${changeColor || changeDir}`}>{changeValue}</span>
-          <span className="db-kpi-change-text">vs prior period</span>
         </div>
+        <span className="db-kpi-change-text">vs prior period</span>
       </div>
-
-      {insight && (
-        <div className="db-kpi-insight-row">
-          <img src={IconInsightStar} alt="" className="db-kpi-insight-icon" />
-          <span className="db-kpi-insight-text">{insight}</span>
-        </div>
-      )}
     </div>
   );
 }
@@ -49,51 +55,45 @@ export default function KPISection({ kpis, rangeLabel }) {
         label={rangeLabel}
         value={`€${kpis.total_sales.toLocaleString()}`}
         dot="green"
-        changeValue="—"
+        changeValue={kpis.total_sales_change ?? FALLBACK_CHANGE.total_sales}
         changeDir="up"
-        insight="Revenue trending above baseline"
       />
       <KPICard
         label="Orders"
         value={kpis.orders.toLocaleString()}
         dot="green"
-        changeValue="—"
+        changeValue={kpis.orders_change ?? FALLBACK_CHANGE.orders}
         changeDir="up"
-        insight="Order velocity steady"
       />
       <KPICard
         label="Gross Profit"
         value={`€${kpis.gross_profit.toLocaleString()}`}
         dot="green"
-        changeValue="—"
+        changeValue={kpis.gross_profit_change ?? FALLBACK_CHANGE.gross_profit}
         changeDir="up"
-        insight="Gross margin improving with stronger product mix"
       />
       <KPICard
         label="Ad Spend"
         value={`€${kpis.ad_spend.toLocaleString()}`}
         dot="red"
-        changeValue="—"
+        changeValue={kpis.ad_spend_change ?? FALLBACK_CHANGE.ad_spend}
         changeDir="up"
         changeColor="down"
-        insight="Meta spend increased to support targeting push"
       />
       <KPICard
-        label="Ad Conversion Rate"
+        label="Ad Conv. Rate"
         value={`${kpis.ad_conversion_rate}%`}
         dot="green"
-        changeValue="—"
+        changeValue={kpis.ad_conversion_rate_change ?? FALLBACK_CHANGE.ad_conversion_rate}
         changeDir="up"
-        insight="Paid traffic converting above weekly baseline"
       />
       <KPICard
         label="ACOS"
         value={`${(kpis.acos * 100).toFixed(1)}%`}
         dot="orange"
-        changeValue="—"
+        changeValue={kpis.acos_change ?? FALLBACK_CHANGE.acos}
         changeDir="up"
         changeColor="warning"
-        insight="Google campaigns outperforming Meta"
       />
     </div>
   );

@@ -107,7 +107,7 @@
   font-weight: 600;
 }
 
-/* KPI SECTION (Responsive Grid) */
+/* KPI SECTION - always 6 columns on desktop */
 .db-kpi-section {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -117,23 +117,16 @@
   min-height: 0;
 }
 
-@media (max-width: 1200px) {
-  .db-kpi-section {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .db-kpi-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
+  justify-content: space-between; /* title top, value middle, comparison bottom */
+  padding: clamp(12px, 1vw, 18px);
   border: 1px solid #dcdfe5;
   border-radius: 16px;
   background-color: transparent;
   min-width: 0;
-  /* Let grid squish the element if needed */
+  overflow: hidden;
 }
 
 .db-kpi-card-top {
@@ -146,102 +139,83 @@
 .db-kpi-label {
   font-family: 'Inter', sans-serif;
   font-weight: 500;
-  font-size: clamp(14px, 1.2vw, 18px);
+  /* Safe floor for 6-col layout on MacBook */
+  font-size: clamp(15px, 0.9vw, 20px);
   color: #000000;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.25;
+  min-width: 0;
 }
 
 .db-kpi-dot {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   flex-shrink: 0;
 }
 
-.db-kpi-middle {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
+/* MIDDLE zone: main KPI value */
 .db-kpi-value {
   font-family: 'Inter', sans-serif;
   font-weight: 600;
-  font-size: clamp(20px, 2vw, 32px);
+  /* Floor 20px is safe even on narrow 6-col MacBook cards */
+  font-size: clamp(26px, 2.2vw, 48px);
   color: #000000;
   line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
-.db-kpi-change-row {
+/* BOTTOM zone: comparison block — two separate lines */
+.db-kpi-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.db-kpi-change-main {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 5px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .db-kpi-arrow {
-  width: 16px;
-  height: 16px;
+  width: clamp(16px, 1.2vw, 22px);
+  height: clamp(16px, 1.2vw, 22px);
   flex-shrink: 0;
 }
 
 .db-kpi-change-pct {
   font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: clamp(14px, 1vw, 18px);
+  font-weight: 700;
+  /* Larger and more prominent than before */
+  font-size: clamp(16px, 1.2vw, 24px);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
+.db-kpi-change-pct.up { color: #16a34a; }
+.db-kpi-change-pct.down { color: #e60f0f; }
+.db-kpi-change-pct.warning { color: #fc8e05; }
 
-.db-kpi-change-pct.up {
-  color: #000000;
-}
-
-.db-kpi-change-pct.down {
-  color: #e60f0f;
-}
-
-.db-kpi-change-pct.warning {
-  color: #fc8e05;
-}
-
+/* Second line of comparison block */
 .db-kpi-change-text {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
-  font-size: clamp(12px, 0.8vw, 15px);
+  font-size: clamp(11px, 0.65vw, 14px);
   color: #474c61;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 
-.db-kpi-insight-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  width: 100%;
-}
-
-.db-kpi-insight-icon {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-}
-
-.db-kpi-insight-text {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: clamp(12px, 0.8vw, 15px);
-  color: #0b36a8;
-  line-height: 1.3;
-  flex: 1;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  /* Ensure KPI text doesn't overflow wildly */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* Insight row removed */
 
 
 /* TOP PRIORITY BANNER */
