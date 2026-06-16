@@ -33,13 +33,8 @@ export default function TopPriorityBanner({ warning }) {
 
       <div className="db-priority-divider" />
 
-      <div className="db-priority-col-text">
-        <span className="db-priority-col-label">Recommended Action</span>
-        <span className="db-priority-text-val" title={warning.recommended_action}>{warning.recommended_action || '—'}</span>
-      </div>
-
       <div className="db-priority-col-actions">
-        <button className="db-priority-btn-primary">Run Deep Review</button>
+        <button className="db-priority-btn-primary">Show in warnings</button>
         <button className="db-priority-btn-secondary">Dismiss</button>
       </div>
     </div>

@@ -17,6 +17,7 @@ export { default as IconTopPriorityAlert } from './a9dc8f4c61a43dc15335edec54428
 export { default as BhHealthy } from './f4718313422c1f7bada3da731d1c4e107b924134.svg';
 export { default as BhWarning } from './585691c7545e2c8bc9156eed59ecfed6ce49f5e9.svg';
 export { default as BhInfo } from './4d4ccaf026ac9204da69e148b186c0a049ddba24.svg';
+export { default as BhCritical } from './BhCritical.svg';
 
 export { default as SidebarHamburger } from './7be09ee01298b07310b685eb9ba41f089f83a32a.svg';
 export { default as SidebarDashboard } from './be658d36d4882893b5701e41bdfd5d538e9f336d.svg';
