@@ -4,15 +4,45 @@ import {
 } from '../../assets/figma_icons';
 import './DashboardLayout.css';
 
-// Fallback comparison values when backend doesn't provide them
-const FALLBACK_CHANGE = {
-  total_sales: '12.4%',
-  orders: '8.7%',
-  gross_profit: '14.1%',
-  ad_spend: '12.5%',
-  ad_conversion_rate: '6.7%',
-  acos: '3.2pp',
-};
+function formatChange(val, isPP = false) {
+  if (val == null) return '0%';
+  const sign = val > 0 ? '+' : '';
+  return `${sign}${val.toFixed(1)}${isPP ? 'pp' : '%'}`;
+}
+
+function getKPIProps(changeVal, type = 'positive') {
+  // Safe default for zero or missing data: flat green up arrow.
+  if (changeVal == null || Math.abs(changeVal) < 0.01) {
+    return {
+      changeDir: 'up',
+      dot: 'green',
+      changeColor: 'up' // green
+    };
+  }
+  
+  const isIncrease = changeVal > 0;
+  
+  if (type === 'cost') {
+    return {
+      changeDir: isIncrease ? 'up' : 'down',
+      dot: isIncrease ? 'red' : 'green',
+      changeColor: isIncrease ? 'down' : 'up' // down maps to red, up maps to green
+    };
+  } else if (type === 'cost-warning') {
+    return {
+      changeDir: isIncrease ? 'up' : 'down',
+      dot: isIncrease ? 'orange' : 'green',
+      changeColor: isIncrease ? 'warning' : 'up' // warning maps to orange, up maps to green
+    };
+  }
+  
+  // Default positive KPIs
+  return {
+    changeDir: isIncrease ? 'up' : 'down',
+    dot: isIncrease ? 'green' : 'red',
+    changeColor: isIncrease ? 'up' : 'down' // up maps to green, down maps to red
+  };
+}
 
 function KPICard({ label, value, dot, changeValue, changeDir, changeColor }) {
   let dotIcon = DotGreen;
@@ -56,47 +86,39 @@ export default function KPISection({ kpis, rangeLabel }) {
     <div className="db-kpi-section">
       <KPICard
         label={rangeLabel}
-        value={`€${kpis.total_sales.toLocaleString()}`}
-        dot="green"
-        changeValue={kpis.total_sales_change ?? FALLBACK_CHANGE.total_sales}
-        changeDir="up"
+        value={`€${kpis.total_sales?.toLocaleString() ?? 0}`}
+        changeValue={formatChange(kpis.total_sales_change)}
+        {...getKPIProps(kpis.total_sales_change, 'positive')}
       />
       <KPICard
         label="Orders"
-        value={kpis.orders.toLocaleString()}
-        dot="green"
-        changeValue={kpis.orders_change ?? FALLBACK_CHANGE.orders}
-        changeDir="up"
+        value={kpis.orders?.toLocaleString() ?? 0}
+        changeValue={formatChange(kpis.orders_change)}
+        {...getKPIProps(kpis.orders_change, 'positive')}
       />
       <KPICard
         label="Gross Profit"
-        value={`€${kpis.gross_profit.toLocaleString()}`}
-        dot="green"
-        changeValue={kpis.gross_profit_change ?? FALLBACK_CHANGE.gross_profit}
-        changeDir="up"
+        value={`€${kpis.gross_profit?.toLocaleString() ?? 0}`}
+        changeValue={formatChange(kpis.gross_profit_change)}
+        {...getKPIProps(kpis.gross_profit_change, 'positive')}
       />
       <KPICard
         label="Ad Spend"
-        value={`€${kpis.ad_spend.toLocaleString()}`}
-        dot="red"
-        changeValue={kpis.ad_spend_change ?? FALLBACK_CHANGE.ad_spend}
-        changeDir="up"
-        changeColor="down"
+        value={`€${kpis.ad_spend?.toLocaleString() ?? 0}`}
+        changeValue={formatChange(kpis.ad_spend_change)}
+        {...getKPIProps(kpis.ad_spend_change, 'cost')}
       />
       <KPICard
         label="Ad Conv. Rate"
         value={`${kpis.ad_conversion_rate}%`}
-        dot="green"
-        changeValue={kpis.ad_conversion_rate_change ?? FALLBACK_CHANGE.ad_conversion_rate}
-        changeDir="up"
+        changeValue={formatChange(kpis.ad_conversion_rate_change, true)}
+        {...getKPIProps(kpis.ad_conversion_rate_change, 'positive')}
       />
       <KPICard
         label="ACOS"
-        value={`${(kpis.acos * 100).toFixed(1)}%`}
-        dot="orange"
-        changeValue={kpis.acos_change ?? FALLBACK_CHANGE.acos}
-        changeDir="up"
-        changeColor="warning"
+        value={`${((kpis.acos || 0) * 100).toFixed(1)}%`}
+        changeValue={formatChange(kpis.acos_change, true)}
+        {...getKPIProps(kpis.acos_change, 'cost-warning')}
       />
     </div>
   );

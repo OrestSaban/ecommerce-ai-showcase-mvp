@@ -110,7 +110,7 @@
   grid-template-columns: repeat(6, 1fr);
   gap: var(--spacing-sm);
   width: 100%;
-  flex: 140 1 0%;
+  flex: 126 1 0%;
   min-height: 0;
 }
 
@@ -478,6 +478,127 @@
   justify-content: flex-end;
 }
 
+/* MODAL */
+.db-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.db-modal-content {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 1200px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.db-modal-header {
+  padding: 24px 32px;
+  border-bottom: 1px solid #dcdfe5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.db-modal-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000;
+  margin: 0;
+}
+
+.db-modal-filters {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.db-modal-select {
+  padding: 6px 32px 6px 12px;
+  border: 1px solid #dcdfe5;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #061029;
+  background: #ffffff url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23474c61' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  outline: none;
+  text-align: left;
+}
+
+.db-modal-select option {
+  text-align: left;
+}
+
+.db-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 16px;
+}
+.db-modal-close:hover svg stroke {
+  stroke: #000000;
+}
+
+.db-modal-body {
+  flex: 1;
+  padding: 32px;
+  min-height: 0;
+}
+
+.db-chart-expand-btn {
+  background: none;
+  border: 1px solid #dcdfe5;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 8px;
+}
+.db-chart-expand-btn:hover {
+  background: #f3f4f6;
+}
+
+@media (max-width: 768px) {
+  .db-modal-overlay {
+    padding: 16px;
+  }
+  .db-modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .db-modal-filters {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
 .db-health-scroll-arrow {
   width: 20px;
   height: 20px;
@@ -618,7 +739,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-md);
   width: 100%;
-  flex: 517 1 0%;
+  flex: 531 1 0%;
   /* Grow, shrink, base 0 -> securely fill remaining space proportionally */
   min-height: 0;
   /* Key to removing vertical scroll! */
