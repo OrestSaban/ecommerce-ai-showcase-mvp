@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { fetchSalesOverTime } from '../../api/client';
 import { IconChevronDown } from '../../assets/figma_icons';
 import './DashboardLayout.css';
@@ -25,7 +25,7 @@ function ExpandedChartModal({ isOpen, onClose, initialData }) {
   const [metric, setMetric] = useState('revenue');
   const [dateRange, setDateRange] = useState('last_30_days');
   const [zoom, setZoom] = useState(1);
-  
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -71,16 +71,16 @@ function ExpandedChartModal({ isOpen, onClose, initialData }) {
           <div className="db-modal-filters">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '13px', color: '#474c61', fontWeight: 500 }}>Zoom</span>
-              <input 
-                type="range" min="1" max="100" value={zoom} 
-                onChange={(e) => setZoom(Number(e.target.value))} 
+              <input
+                type="range" min="1" max="100" value={zoom}
+                onChange={(e) => setZoom(Number(e.target.value))}
                 style={{ width: '100px' }}
               />
-              <button 
+              <button
                 onClick={() => setZoom(1)}
-                style={{ 
+                style={{
                   visibility: zoom > 1 ? 'visible' : 'hidden',
-                  fontSize: '12px', padding: '4px 8px', background: '#f3f4f6', 
+                  fontSize: '12px', padding: '4px 8px', background: '#f3f4f6',
                   border: '1px solid #dcdfe5', borderRadius: '4px', cursor: 'pointer',
                   color: '#474c61'
                 }}
@@ -88,13 +88,13 @@ function ExpandedChartModal({ isOpen, onClose, initialData }) {
                 Reset view
               </button>
             </div>
-            <select 
-              value={visualRange} 
+            <select
+              value={visualRange}
               onChange={(e) => {
                 if (e.target.value !== 'custom') {
                   setDateRange(e.target.value);
                 }
-              }} 
+              }}
               className="db-modal-select"
             >
               {visualRange === 'custom' && <option value="custom">Custom</option>}
@@ -128,22 +128,21 @@ function ExpandedChartModal({ isOpen, onClose, initialData }) {
               <span style={{ color: '#da1615' }}>Error: {error}</span>
             </div>
           )}
-          
+
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={displayData} margin={{ top: 20, right: 30, bottom: 20, left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#dcdfe5" />
-              <XAxis dataKey="label" tick={{ fontSize: 14, fill: '#000000', fontFamily: 'Inter' }} axisLine={{ stroke: '#dcdfe5' }} tickLine={false} />
-              <YAxis tick={{ fontSize: 14, fill: '#000000', fontFamily: 'Inter' }} axisLine={false} tickLine={false} tickFormatter={(v) => formatAxisTick(v, metric)} />
-              <Tooltip formatter={(val) => [`${metric === 'orders' ? '' : '€'}${val?.toLocaleString() ?? 0}`, metricLabelMap[metric]]} contentStyle={{ borderRadius: 8, border: '1px solid #dcdfe5', fontFamily: 'Inter', color: '#000' }} />
-              <Line 
-                type="monotone" 
-                dataKey={metric} 
-                stroke="#3b82f6" 
-                strokeWidth={displayData.length > 90 ? 2 : 3} 
-                dot={displayData.length > 60 ? false : { r: 6, fill: '#3b82f6', stroke: '#ffffff', strokeWidth: 2 }} 
-                activeDot={{ r: 8 }} 
-              />
-            </LineChart>
+            <AreaChart data={displayData} margin={{ top: 20, right: 30, bottom: 10, left: 20 }}>
+              <defs>
+                <linearGradient id="colorMetricModal" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#eaebef" vertical={false} />
+              <XAxis dataKey="label" tick={{ fontSize: 13, fill: '#474c61', fontFamily: 'Inter' }} axisLine={{ stroke: '#eaebef' }} tickLine={false} tickMargin={12} />
+              <YAxis tick={{ fontSize: 13, fill: '#474c61', fontFamily: 'Inter' }} axisLine={false} tickLine={false} tickMargin={12} tickFormatter={(v) => formatAxisTick(v, metric)} />
+              <Tooltip formatter={(val) => [`${metric === 'orders' ? '' : '€'}${val?.toLocaleString() ?? 0}`, metricLabelMap[metric]]} contentStyle={{ borderRadius: 8, border: '1px solid #dcdfe5', fontFamily: 'Inter', color: '#000', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }} />
+              <Area type="monotone" dataKey={metric} stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorMetricModal)" activeDot={{ r: 8, strokeWidth: 0, fill: '#3b82f6' }} />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
@@ -155,7 +154,7 @@ export default function ChartsSection({ salesOverTime, salesByCategory }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timeMetric, setTimeMetric] = useState('revenue');
   const [catMetric, setCatMetric] = useState('revenue');
-  
+
   // Format line chart data
   const lineData = (salesOverTime || []).map((d) => ({
     ...d,
@@ -191,9 +190,9 @@ export default function ChartsSection({ salesOverTime, salesByCategory }) {
         <div className="db-chart-header">
           <span className="db-chart-title">Sales Over Time</span>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <select 
-              value={timeMetric} 
-              onChange={(e) => setTimeMetric(e.target.value)} 
+            <select
+              value={timeMetric}
+              onChange={(e) => setTimeMetric(e.target.value)}
               className="db-modal-select"
             >
               <option value="revenue">Revenue</option>
@@ -210,13 +209,19 @@ export default function ChartsSection({ salesOverTime, salesByCategory }) {
         </div>
         <div className="db-chart-body">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={lineData} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#dcdfe5" />
+            <AreaChart data={lineData} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
+              <defs>
+                <linearGradient id="colorMetricDashboard" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#dcdfe5" vertical={false} />
               <XAxis dataKey="label" tick={{ fontSize: 14, fill: '#000000', fontFamily: 'Inter' }} axisLine={{ stroke: '#dcdfe5' }} tickLine={false} />
               <YAxis tick={{ fontSize: 14, fill: '#000000', fontFamily: 'Inter' }} axisLine={false} tickLine={false} tickFormatter={(v) => formatAxisTick(v, timeMetric)} />
               <Tooltip formatter={(val) => [`${timeMetric === 'orders' ? '' : '€'}${val?.toLocaleString() ?? 0}`, metricLabelMap[timeMetric]]} contentStyle={{ borderRadius: 8, border: '1px solid #dcdfe5', fontFamily: 'Inter', color: '#000' }} />
-              <Line type="monotone" dataKey={timeMetric} stroke="#3b82f6" strokeWidth={2.5} dot={{ r: 6, fill: '#3b82f6', stroke: '#ffffff', strokeWidth: 2 }} activeDot={{ r: 8 }} />
-            </LineChart>
+              <Area type="monotone" dataKey={timeMetric} stroke="#3b82f6" strokeWidth={2.5} fillOpacity={1} fill="url(#colorMetricDashboard)" dot={{ r: 4, fill: '#ffffff', stroke: '#3b82f6', strokeWidth: 2 }} activeDot={{ r: 8, stroke: '#ffffff', strokeWidth: 2 }} />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
@@ -224,9 +229,9 @@ export default function ChartsSection({ salesOverTime, salesByCategory }) {
       <div className="db-chart-card">
         <div className="db-chart-header">
           <span className="db-chart-title">Sales by Category</span>
-          <select 
-            value={catMetric} 
-            onChange={(e) => setCatMetric(e.target.value)} 
+          <select
+            value={catMetric}
+            onChange={(e) => setCatMetric(e.target.value)}
             className="db-modal-select"
           >
             <option value="revenue">Revenue</option>
@@ -247,10 +252,10 @@ export default function ChartsSection({ salesOverTime, salesByCategory }) {
         </div>
       </div>
 
-      <ExpandedChartModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        initialData={lineData} 
+      <ExpandedChartModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialData={lineData}
       />
     </div>
   );
