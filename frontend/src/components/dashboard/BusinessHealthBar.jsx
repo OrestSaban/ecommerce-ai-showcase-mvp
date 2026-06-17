@@ -51,32 +51,33 @@ export default function BusinessHealthBar({ items }) {
           </div>
         )}
         <div className="db-health-items-scroll" ref={scrollRef} onScroll={checkScroll}>
+          <div className="db-health-items-inner" style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', pointerEvents: 'auto', padding: '8px 0' }}>
+            {items.map((bh, idx) => (
+              <div key={bh.domain} style={{ display: 'contents' }}>
+                <div className="db-health-divider" />
+                <div className="db-health-item">
+                  <img src={getStatusIcon(bh.status)} alt={bh.status} className="db-health-icon" />
+                  <div className="db-health-text-col">
+                    <div className="db-health-label-row">
+                      <span className="db-health-label">{domainLabels[bh.domain] || bh.domain}</span>
+                      
+                      <div className="db-tooltip-container">
+                        <img src={BhInfo} alt="Info" className="db-health-info" />
+                        <div className={`db-tooltip-popup ${idx === items.length - 1 ? 'db-tooltip-popup--last' : ''}`}>
+                          <div className="db-tooltip-title">{bh.tooltip_title}</div>
+                          <div>{bh.tooltip_description}</div>
+                        </div>
+                      </div>
 
-      {items.map((bh, idx) => (
-        <div key={bh.domain} style={{ display: 'contents' }}>
-          <div className="db-health-divider" />
-          <div className="db-health-item">
-            <img src={getStatusIcon(bh.status)} alt={bh.status} className="db-health-icon" />
-            <div className="db-health-text-col">
-              <div className="db-health-label-row">
-                <span className="db-health-label">{domainLabels[bh.domain] || bh.domain}</span>
-                
-                <div className="db-tooltip-container">
-                  <img src={BhInfo} alt="Info" className="db-health-info" />
-                  <div className={`db-tooltip-popup ${idx === items.length - 1 ? 'db-tooltip-popup--last' : ''}`}>
-                    <div className="db-tooltip-title">{bh.tooltip_title}</div>
-                    <div>{bh.tooltip_description}</div>
+                    </div>
+                    <span className="db-health-status">
+                      {bh.status.charAt(0).toUpperCase() + bh.status.slice(1)}
+                    </span>
                   </div>
                 </div>
-
               </div>
-              <span className="db-health-status">
-                {bh.status.charAt(0).toUpperCase() + bh.status.slice(1)}
-              </span>
-            </div>
+            ))}
           </div>
-        </div>
-      ))}
         </div>
         {showRightFade && (
           <div className="db-health-fade-right">

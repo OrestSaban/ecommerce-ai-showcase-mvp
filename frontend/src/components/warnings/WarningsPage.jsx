@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { getWarnings } from '../../api/client';
 import WarningCard from './WarningCard';
 import DeepReviewModal from './DeepReviewModal';
+import ActionPlanModal, { useActionPlanStore } from './ActionPlanModal';
 import './Warnings.css';
 
 const FILTERS = ['All', 'Ads', 'Inventory', 'Refunds', 'Listings'];
@@ -17,6 +18,11 @@ export default function WarningsPage() {
   const [isExiting, setIsExiting] = useState(false);
   const [minutesSinceUpdate, setMinutesSinceUpdate] = useState(15);
   const [isUpdating, setIsUpdating] = useState(false);
+  
+  const [preparingIds, setPreparingIds] = useState(new Set());
+  const [selectedActionPlan, setSelectedActionPlan] = useState(null);
+  
+  const { getPlan, storePlan } = useActionPlanStore();
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -95,6 +101,30 @@ export default function WarningsPage() {
     setSelectedWarningForReview(warning);
   };
 
+  const handlePrepareActionPlan = (warning) => {
+    const existingPlan = getPlan(warning.warning_id);
+    if (existingPlan) {
+      setSelectedActionPlan(existingPlan);
+      return;
+    }
+
+    setPreparingIds((prev) => {
+      const next = new Set(prev);
+      next.add(warning.warning_id);
+      return next;
+    });
+
+    setTimeout(() => {
+      const newPlan = storePlan(warning);
+      setPreparingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(warning.warning_id);
+        return next;
+      });
+      setSelectedActionPlan(newPlan);
+    }, 1500);
+  };
+
   const filteredWarnings = warnings.filter(w => {
     if (activeFilter === 'All') return true;
     if (activeFilter === 'Ads' && w.category === 'advertising') return true;
@@ -164,6 +194,9 @@ export default function WarningsPage() {
               isExpanded={expandedId === warning.warning_id}
               onToggle={() => handleToggle(warning.warning_id)}
               onRunDeepReview={handleRunDeepReview}
+              onPrepareActionPlan={handlePrepareActionPlan}
+              actionPlanReady={!!getPlan(warning.warning_id)}
+              isPreparingPlan={preparingIds.has(warning.warning_id)}
             />
           ))}
         </div>
@@ -179,6 +212,11 @@ export default function WarningsPage() {
           onClose={() => setSelectedWarningForReview(null)} 
         />
       )}
+      
+      <ActionPlanModal 
+        plan={selectedActionPlan}
+        onClose={() => setSelectedActionPlan(null)}
+      />
     </>
   );
 }

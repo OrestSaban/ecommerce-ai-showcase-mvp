@@ -1,3 +1,4 @@
+import { useState } from 'react';
 
 const getIconForCategory = (category) => {
   switch(category) {
@@ -43,7 +44,7 @@ const getIconForCategory = (category) => {
   }
 };
 
-export default function WarningCard({ warning, isExpanded, onToggle, onRunDeepReview }) {
+export default function WarningCard({ warning, isExpanded, onToggle, onPrepareActionPlan, actionPlanReady, isPreparingPlan }) {
   const {
     title,
     category,
@@ -55,6 +56,46 @@ export default function WarningCard({ warning, isExpanded, onToggle, onRunDeepRe
     recommended_action,
     action_plan_preview
   } = warning;
+
+  const handleActionPlanClick = (e) => {
+    e.stopPropagation();
+    onPrepareActionPlan(warning);
+  };
+
+  const renderActionButton = () => {
+    if (isPreparingPlan) {
+      return (
+        <button className="action-btn action-btn-loading" disabled>
+          <svg className="action-btn-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          AI is preparing action plan...
+        </button>
+      );
+    }
+
+    if (actionPlanReady) {
+      return (
+        <button className="action-btn action-btn-ready" onClick={handleActionPlanClick}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/>
+            <path d="M14 2v6h6"/>
+            <path d="m16 13-3.5 3.5-2-2L8 17"/>
+          </svg>
+          View Action Plan
+        </button>
+      );
+    }
+
+    return (
+      <button className="action-btn" onClick={handleActionPlanClick}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+        </svg>
+        Prepare Action Plan
+      </button>
+    );
+  };
 
   return (
     <div id={`warning-card-${warning.warning_id}`} className={`warning-card ${isExpanded ? 'expanded' : ''} ${isExpanded ? `expanded-${severity.toLowerCase()}` : ''}`} onClick={onToggle}>
@@ -144,12 +185,7 @@ export default function WarningCard({ warning, isExpanded, onToggle, onRunDeepRe
           
           <div className="warning-actions">
             <h4 className="section-title">Next step</h4>
-            <button className="action-btn" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-              </svg>
-              Prepare action plan
-            </button>
+            {renderActionButton()}
           </div>
         </>
       )}

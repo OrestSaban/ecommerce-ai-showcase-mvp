@@ -393,6 +393,11 @@
   font-size: clamp(14px, 1vw, 18px);
   cursor: pointer;
   white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.db-priority-btn-primary:hover {
+  background-color: #bd1313;
 }
 
 .db-priority-btn-secondary {
