@@ -248,7 +248,7 @@
 .db-priority-banner {
   display: flex;
   flex-wrap: wrap;
-  align-items: center; /* center items vertically when they wrap */
+  align-items: stretch; /* stretch items so all columns share the same top baseline */
   gap: var(--spacing-lg);
   padding: var(--spacing-md) var(--spacing-lg); /* tighter vertical padding */
   background-color: #fef9fa;
