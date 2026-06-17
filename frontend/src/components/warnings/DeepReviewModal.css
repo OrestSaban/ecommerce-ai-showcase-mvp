@@ -1,0 +1,204 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(6, 16, 41, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 24px rgba(6, 16, 41, 0.1);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 24px;
+  border-bottom: 1px solid #dcdfe5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #061029;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #757e94;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: #061029;
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.error-text {
+  color: #d90605;
+}
+
+.scenario-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.summary-banner {
+  display: flex;
+  gap: 24px;
+  background-color: #f5f7f9;
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 1px solid #dcdfe5;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #495a74;
+}
+
+.summary-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #061029;
+}
+
+.summary-value.impact {
+  color: #d90605;
+}
+
+.models-reasoning h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #061029;
+}
+
+.models-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.model-card {
+  border: 1px solid #dcdfe5;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.model-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.model-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #061029;
+}
+
+.verdict-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.verdict-badge.agree {
+  background-color: #e6f6ec;
+  color: #037847;
+}
+
+.verdict-badge.partial_agree {
+  background-color: #fef3e4;
+  color: #f9801d;
+}
+
+.model-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #283b57;
+  line-height: 1.5;
+}
+
+.modal-footer {
+  padding: 24px;
+  border-top: 1px solid #dcdfe5;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #dcdfe5;
+  background-color: #ffffff;
+  color: #061029;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #f5f7f9;
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: #0050fe;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0040cc;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

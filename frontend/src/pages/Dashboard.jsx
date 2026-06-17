@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   fetchKPIs,
   fetchSalesOverTime,
@@ -16,6 +17,16 @@ import ChartsSection from '../components/dashboard/ChartsSection';
 import '../components/dashboard/DashboardLayout.css';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/' && !sessionStorage.getItem('warnings_opened_once')) {
+      sessionStorage.setItem('warnings_opened_once', 'true');
+      navigate('/warnings', { replace: true });
+    }
+  }, [navigate, location]);
+
   const [range, setRange] = useState('last_7_days');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -92,6 +103,7 @@ export default function Dashboard() {
         
         <ChartsSection salesOverTime={salesOverTime} salesByCategory={salesByCategory} />
       </div>
+      <Outlet />
     </div>
   );
 }

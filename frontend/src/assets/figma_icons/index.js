@@ -23,5 +23,6 @@ export { default as SidebarHamburger } from './7be09ee01298b07310b685eb9ba41f089
 export { default as SidebarDashboard } from './be658d36d4882893b5701e41bdfd5d538e9f336d.svg';
 export { default as SidebarAsk } from './ef25b91179b009cc3460f1c4a226c76655ca6ba6.svg';
 export { default as SidebarWarnings } from './59549f3d47bca02342f3c5b8c83795dbcdffaa6e.svg';
+export { default as SidebarWarningsNew } from './SidebarWarningsNew.svg';
 export { default as SidebarControl } from './6e615e728093781c6e473f481f985a70f75f1c0c.svg';
 export { default as SidebarHelp } from './3171ccccedad3c4633b3bfc84c08d390ecc9d821.svg';

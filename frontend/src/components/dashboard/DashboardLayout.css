@@ -255,10 +255,10 @@
   border: 1px solid #fbd6d5;
   border-radius: 16px;
   position: relative;
-  z-index: 1; /* base stacking context */
+  z-index: 1; /* below Business Health bar tooltips (z-index: 10) */
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
   flex: none; /* Banner takes only the height it needs, fixing oversized look */
 }
 
@@ -275,7 +275,7 @@
 
 .db-priority-col-identity {
   display: flex;
-  align-items: flex-start; /* align top so title matches impact block height */
+  align-items: flex-start;
   gap: var(--spacing-sm);
   flex-shrink: 0;
 }
@@ -284,12 +284,14 @@
   width: 56px;
   height: 56px;
   flex-shrink: 0;
+  align-self: center;
 }
 
 .db-priority-identity-text {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  align-self: center;
 }
 
 .db-priority-label {
@@ -442,6 +444,7 @@
   width: 100%; /* Fill the wrapper */
   overflow-x: auto;
   overflow-y: visible;
+  pointer-events: none; /* Let clicks pass through the invisible padding area to the banner below */
 
   /* Trick: extend padding upwards to prevent tooltip vertical clipping,
      while offsetting margin so visual layout is unchanged */
@@ -698,6 +701,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: auto; /* Re-enable interactions (parent scroll container has pointer-events: none) */
 }
 
 .db-tooltip-popup {

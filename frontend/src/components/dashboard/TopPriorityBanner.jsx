@@ -1,8 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import { IconTopPriorityAlert } from '../../assets/figma_icons';
 import './DashboardLayout.css';
 
 export default function TopPriorityBanner({ warning }) {
+  const navigate = useNavigate();
+
   if (!warning) return null;
+
+  const handleShowInWarnings = (e) => {
+    e.stopPropagation();
+    navigate(`/warnings?expand=${warning.warning_id}`);
+  };
 
   return (
     <div className="db-priority-banner">
@@ -34,8 +42,14 @@ export default function TopPriorityBanner({ warning }) {
       <div className="db-priority-divider" />
 
       <div className="db-priority-col-actions">
-        <button className="db-priority-btn-primary">Show in warnings</button>
-        <button className="db-priority-btn-secondary">Dismiss</button>
+        <button 
+          className="db-priority-btn-primary" 
+          onClick={handleShowInWarnings}
+          type="button"
+        >
+          Show in warnings
+        </button>
+        <button className="db-priority-btn-secondary" type="button">Dismiss</button>
       </div>
     </div>
   );

@@ -9,6 +9,11 @@ from services.analytics_service import (
     get_top_priority_warning,
     get_business_health_summary,
 )
+from services.warnings_service import (
+    get_all_warnings,
+    get_warning_by_id,
+    get_deep_review_scenario,
+)
 
 app = FastAPI(title="Ecommerce Showcase API")
 
@@ -78,5 +83,40 @@ def top_priority_warning():
 def business_health():
     try:
         return get_business_health_summary()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Warnings endpoints ──────────────────────────────────
+
+@app.get("/api/warnings")
+def warnings_list():
+    try:
+        return get_all_warnings()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/warnings/{warning_id}")
+def warning_details(warning_id: str):
+    try:
+        warning = get_warning_by_id(warning_id)
+        if not warning:
+            raise HTTPException(status_code=404, detail=f"Warning {warning_id} not found")
+        return warning
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/warnings/{warning_id}/deep-review")
+def warning_deep_review(warning_id: str):
+    try:
+        scenario = get_deep_review_scenario(warning_id)
+        if not scenario:
+            # The prompt says: "Return null or clear message if no scenario exists."
+            return {"scenario": None, "message": "No deep review scenario exists for this warning."}
+        return {"scenario": scenario}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

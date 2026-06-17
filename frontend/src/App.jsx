@@ -12,8 +12,9 @@ function App() {
       <Sidebar />
       <div className="main-content">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/warnings" element={<Warnings />} />
+          <Route path="/" element={<Dashboard />}>
+            <Route path="warnings" element={<Warnings />} />
+          </Route>
           <Route path="/ask" element={<Ask />} />
           <Route path="/control" element={<Control />} />
         </Routes>

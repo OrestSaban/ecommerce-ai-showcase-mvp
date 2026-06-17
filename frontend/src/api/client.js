@@ -35,3 +35,17 @@ export function fetchBusinessHealth() {
 export function fetchHealth() {
   return fetchJSON('/health');
 }
+
+// --- Warnings API ---
+
+export function getWarnings() {
+  return fetchJSON('/api/warnings');
+}
+
+export function getWarningById(warningId) {
+  return fetchJSON(`/api/warnings/${warningId}`);
+}
+
+export function getWarningDeepReview(warningId) {
+  return fetchJSON(`/api/warnings/${warningId}/deep-review`);
+}

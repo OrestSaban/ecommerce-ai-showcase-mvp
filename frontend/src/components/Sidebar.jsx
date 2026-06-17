@@ -1,40 +1,77 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   SidebarHamburger,
-  SidebarDashboard,
   SidebarAsk,
-  SidebarWarnings,
+  SidebarWarningsNew,
   SidebarControl,
   SidebarHelp
 } from '../assets/figma_icons';
 import './Sidebar.css';
 
 export default function Sidebar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const isWarningsOpen = location.pathname === '/warnings';
+  
+  const toggleWarnings = () => {
+    if (isWarningsOpen) {
+      window.dispatchEvent(new Event('close-warnings'));
+    } else {
+      navigate('/warnings');
+    }
+  };
+
   return (
     <aside className="sidebar">
       {/* Top section: menu toggle */}
       <div className="sidebar-top">
-        <button className="sidebar-hamburger" title="Menu">
+        <button className="sidebar-hamburger" title="Menu" onClick={toggleWarnings}>
           <img src={SidebarHamburger} alt="Menu" />
         </button>
       </div>
 
-      {/* Navigation icons */}
       <nav className="sidebar-nav">
-        <NavLink to="/" className="sidebar-icon-btn" title="Dashboard">
-          <img src={SidebarDashboard} alt="Dashboard" />
+        <NavLink 
+          to="/warnings" 
+          className="sidebar-icon-btn" 
+          title="Warnings"
+          onClick={(e) => {
+            if (location.pathname === '/warnings') {
+              e.preventDefault();
+              window.dispatchEvent(new Event('close-warnings'));
+            }
+          }}
+        >
+          <img src={SidebarWarningsNew} alt="Warnings" />
         </NavLink>
 
-        <NavLink to="/ask" className="sidebar-icon-btn" title="Ask">
+        <NavLink 
+          to="/ask" 
+          className="sidebar-icon-btn" 
+          title="Ask"
+          onClick={(e) => {
+            if (location.pathname === '/ask') {
+              e.preventDefault();
+              navigate('/');
+            }
+          }}
+        >
           <img src={SidebarAsk} alt="Ask" />
         </NavLink>
 
-        <NavLink to="/warnings" className="sidebar-icon-btn" title="Warnings">
-          <img src={SidebarWarnings} alt="Warnings" />
-        </NavLink>
-
-        <NavLink to="/control" className="sidebar-icon-btn" title="Control">
-          <img src={SidebarControl} alt="Control" />
+        <NavLink 
+          to="/control" 
+          className="sidebar-icon-btn" 
+          title="Settings"
+          onClick={(e) => {
+            if (location.pathname === '/control') {
+              e.preventDefault();
+              navigate('/');
+            }
+          }}
+        >
+          <img src={SidebarControl} alt="Settings" />
         </NavLink>
       </nav>
 
