@@ -14,8 +14,25 @@ from services.warnings_service import (
     get_warning_by_id,
     get_deep_review_scenario,
 )
+from services.local_data_repository import LocalDataRepository
+from services.ask.ask_service import AskService
+from pydantic import BaseModel
+from typing import Optional, List
 
 app = FastAPI(title="Ecommerce Showcase API")
+
+# Initialize AskService
+ask_repository = LocalDataRepository()
+ask_service_instance = AskService(ask_repository)
+
+# Pydantic models for Ask API
+class MessageHistory(BaseModel):
+    role: str
+    content: str
+
+class AskRequest(BaseModel):
+    message: str
+    history: Optional[List[MessageHistory]] = None
 
 app.add_middleware(
     CORSMiddleware,
@@ -118,5 +135,20 @@ def warning_deep_review(warning_id: str):
             # The prompt says: "Return null or clear message if no scenario exists."
             return {"scenario": None, "message": "No deep review scenario exists for this warning."}
         return {"scenario": scenario}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Ask endpoints ───────────────────────────────────────
+
+@app.post("/api/ask/message")
+def ask_message(request: AskRequest):
+    message = request.message.strip()
+    if not message:
+        raise HTTPException(status_code=400, detail="Message cannot be empty")
+        
+    try:
+        history = [h.model_dump() for h in request.history] if request.history else []
+        return ask_service_instance.process_message(message, history)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
