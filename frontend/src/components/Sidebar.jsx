@@ -67,7 +67,7 @@ export default function Sidebar() {
           onClick={(e) => {
             if (location.pathname === '/control') {
               e.preventDefault();
-              navigate('/');
+              window.dispatchEvent(new Event('close-control'));
             }
           }}
         >

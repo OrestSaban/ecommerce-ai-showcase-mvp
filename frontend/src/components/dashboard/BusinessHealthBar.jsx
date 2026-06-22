@@ -51,7 +51,8 @@ export default function BusinessHealthBar({ items }) {
           </div>
         )}
         <div className="db-health-items-scroll" ref={scrollRef} onScroll={checkScroll}>
-          <div className="db-health-items-inner" style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', pointerEvents: 'auto', padding: '8px 0' }}>
+          <div className="db-health-items-inner" style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', pointerEvents: 'auto', padding: '8px 0', minWidth: '100%' }}>
+
             {items.map((bh, idx) => (
               <div key={bh.domain} style={{ display: 'contents' }}>
                 <div className="db-health-divider" />

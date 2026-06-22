@@ -4,6 +4,7 @@ import { getWarnings } from '../../api/client';
 import WarningCard from './WarningCard';
 import DeepReviewModal from './DeepReviewModal';
 import ActionPlanModal, { useActionPlanStore } from './ActionPlanModal';
+import DrawerPanel from '../common/DrawerPanel';
 import './Warnings.css';
 
 const FILTERS = ['All', 'Ads', 'Inventory', 'Refunds', 'Listings'];
@@ -15,7 +16,6 @@ export default function WarningsPage() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [expandedId, setExpandedId] = useState(null);
   const [selectedWarningForReview, setSelectedWarningForReview] = useState(null);
-  const [isExiting, setIsExiting] = useState(false);
   const [minutesSinceUpdate, setMinutesSinceUpdate] = useState(15);
   const [isUpdating, setIsUpdating] = useState(false);
   
@@ -134,23 +134,9 @@ export default function WarningsPage() {
     return false;
   });
 
-  const handleCloseDrawer = () => {
-    setIsExiting(true);
-    setTimeout(() => {
-      navigate('/');
-    }, 250); // Slightly less than 300ms to ensure it unmounts cleanly
-  };
-
-  useEffect(() => {
-    const onExit = () => handleCloseDrawer();
-    window.addEventListener('close-warnings', onExit);
-    return () => window.removeEventListener('close-warnings', onExit);
-  }, []);
-
   return (
     <>
-      <div className={`warnings-backdrop ${isExiting ? 'exiting' : ''}`} onClick={handleCloseDrawer}></div>
-      <div className={`warnings-drawer ${isExiting ? 'exiting' : ''}`}>
+      <DrawerPanel closeEventName="close-warnings" returnPath="/" maxWidth="870px">
         {loading ? (
           <div className="warnings-container">Loading warnings...</div>
         ) : error ? (
@@ -204,7 +190,7 @@ export default function WarningsPage() {
       </div>
       
         )}
-      </div>
+      </DrawerPanel>
       
       {selectedWarningForReview && (
         <DeepReviewModal 
