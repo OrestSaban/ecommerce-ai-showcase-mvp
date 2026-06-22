@@ -53,7 +53,7 @@ export default function Sidebar() {
           onClick={(e) => {
             if (location.pathname === '/ask') {
               e.preventDefault();
-              navigate('/');
+              window.dispatchEvent(new Event('close-ask'));
             }
           }}
         >
