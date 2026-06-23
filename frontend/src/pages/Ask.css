@@ -273,3 +273,55 @@
     max-width: 95%;
   }
 }
+
+/* Markdown Styles inside Assistant Bubble */
+.ask-markdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ask-markdown p {
+  margin: 0;
+}
+
+.ask-markdown h1, 
+.ask-markdown h2, 
+.ask-markdown h3 {
+  margin: 12px 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.ask-markdown h1:first-child,
+.ask-markdown h2:first-child,
+.ask-markdown h3:first-child {
+  margin-top: 0;
+}
+
+.ask-markdown ul, 
+.ask-markdown ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.ask-markdown li {
+  margin-bottom: 4px;
+}
+
+.ask-markdown li:last-child {
+  margin-bottom: 0;
+}
+
+.ask-markdown strong {
+  font-weight: 600;
+  color: #000000;
+}
+
+.ask-markdown hr {
+  border: 0;
+  border-top: 1px solid #dcdfe5;
+  margin: 8px 0;
+  width: 100%;
+}

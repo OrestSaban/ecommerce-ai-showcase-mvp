@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 import DrawerPanel from '../components/common/DrawerPanel';
 import './Ask.css';
 
@@ -209,12 +211,21 @@ export default function Ask() {
                     </div>
                   )}
                   <div className={`ask-message-bubble ${msg.role}`}>
-                    {msg.content.split('\n').map((line, i) => (
-                      <React.Fragment key={i}>
-                        {line}
-                        {i !== msg.content.split('\n').length - 1 && <br />}
-                      </React.Fragment>
-                    ))}
+                    {msg.role === 'assistant' ? (
+                      <div 
+                        className="ask-markdown" 
+                        dangerouslySetInnerHTML={{ 
+                          __html: DOMPurify.sanitize(marked(String(msg.content || ''))) 
+                        }} 
+                      />
+                    ) : (
+                      msg.content.split('\n').map((line, i) => (
+                        <React.Fragment key={i}>
+                          {line}
+                          {i !== msg.content.split('\n').length - 1 && <br />}
+                        </React.Fragment>
+                      ))
+                    )}
                   </div>
                 </div>
               ))}
