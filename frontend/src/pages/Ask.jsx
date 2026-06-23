@@ -64,23 +64,44 @@ export default function Ask() {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const handleSend = (text) => {
+  const handleSend = async (text) => {
     if (!text.trim()) return;
 
     // Add user message
     const newUserMessage = { role: 'user', content: text };
-    setMessages(prev => [...prev, newUserMessage]);
+    const updatedMessages = [...messages, newUserMessage];
+    setMessages(updatedMessages);
     setInputValue('');
     setIsTyping(true);
 
-    // Mock response flow
-    setTimeout(() => {
+    // Build history from previous messages (exclude the one we just added)
+    const history = messages.map(m => ({ role: m.role, content: m.content }));
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/ask/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
       setIsTyping(false);
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: "I'll be able to answer questions about:\n• sales\n• advertising\n• profitability\n• inventory\n• warnings\n• business health\n\nReal analytics functionality will be connected next."
+        content: data.answer || 'No response received.',
       }]);
-    }, 1000);
+    } catch (err) {
+      console.error('Ask API error:', err);
+      setIsTyping(false);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Sorry, I could not reach the AI service right now. Please try again.',
+      }]);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -108,23 +129,25 @@ export default function Ask() {
           )}
         </div>
 
-        {/* Input Box */}
-        <div className="ask-input-wrapper">
-          <input 
-            type="text" 
-            className="ask-input" 
-            placeholder="Ask about your business..." 
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <button className="ask-send-btn" onClick={() => handleSend(inputValue)}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13" />
-              <polygon points="22 2 15 22 11 13 2 9 22 2" />
-            </svg>
-          </button>
-        </div>
+        {/* Input Box - on top for empty state */}
+        {messages.length === 0 && (
+          <div className="ask-input-wrapper">
+            <input 
+              type="text" 
+              className="ask-input" 
+              placeholder="Ask about your business..." 
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <button className="ask-send-btn" onClick={() => handleSend(inputValue)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {/* Main Content Area */}
         <div className="ask-content">
@@ -212,6 +235,26 @@ export default function Ask() {
             </div>
           )}
         </div>
+
+        {/* Input Box - at bottom for chat mode */}
+        {messages.length > 0 && (
+          <div className="ask-input-wrapper ask-input-bottom">
+            <input 
+              type="text" 
+              className="ask-input" 
+              placeholder="Ask a follow-up..." 
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <button className="ask-send-btn" onClick={() => handleSend(inputValue)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </DrawerPanel>
   );

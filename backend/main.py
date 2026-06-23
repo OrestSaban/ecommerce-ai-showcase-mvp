@@ -152,3 +152,18 @@ def ask_message(request: AskRequest):
         return ask_service_instance.process_message(message, history)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/ask/debug")
+def ask_debug():
+    """Temporary diagnostic endpoint to verify LLM provider configuration."""
+    llm = ask_service_instance._llm
+    key = llm.anthropic_key
+    return {
+        "provider": llm.provider_name,
+        "configured": llm._is_configured(),
+        "model": llm.anthropic_model,
+        "anthropic_sdk_available": llm.anthropic_sdk_available,
+        "api_key_set": bool(key and len(key) > 0),
+        "api_key_prefix": (key[:12] + "...") if key and len(key) > 12 else None,
+    }
