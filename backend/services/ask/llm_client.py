@@ -41,13 +41,17 @@ RULES AND GUARDRAILS:
 def _convert_schemas_to_anthropic(schemas: list[dict]) -> list[dict]:
     """Convert OpenAI-style tool schemas to Anthropic format."""
     anthropic_tools = []
-    for schema in schemas:
+    for i, schema in enumerate(schemas):
         func = schema["function"]
-        anthropic_tools.append({
+        tool = {
             "name": func["name"],
             "description": func["description"],
             "input_schema": func.get("parameters", {"type": "object", "properties": {}}),
-        })
+        }
+        # Optimization: Add prompt caching breakpoint to the last tool schema
+        if i == len(schemas) - 1:
+            tool["cache_control"] = {"type": "ephemeral"}
+        anthropic_tools.append(tool)
     return anthropic_tools
 
 
@@ -166,9 +170,14 @@ class LLMClient:
             response = self._anthropic_client.messages.create(
                 model=self.anthropic_model,
                 max_tokens=2048,
-                system=self.system_prompt,
+                system=[{
+                    "type": "text",
+                    "text": self.system_prompt,
+                    "cache_control": {"type": "ephemeral"}
+                }],
                 tools=anthropic_tools,
                 messages=messages,
+                extra_headers={"anthropic-beta": "prompt-caching-2024-07-31"}
             )
 
             # Parse the response
@@ -188,6 +197,21 @@ class LLMClient:
                     })
 
             answer = "\n".join(text_parts) if text_parts else None
+
+            # Optimization 3: Token usage logging
+            if hasattr(response, "usage") and response.usage:
+                in_tok = getattr(response.usage, "input_tokens", 0)
+                out_tok = getattr(response.usage, "output_tokens", 0)
+                
+                cache_creation = getattr(response.usage, "cache_creation_input_tokens", 0)
+                cache_read = getattr(response.usage, "cache_read_input_tokens", 0)
+                
+                tot_tok = in_tok + out_tok
+                tool_names = [tc["name"] for tc in tool_calls] if tool_calls else "None"
+                logger.info(
+                    f"Anthropic API Usage - Input: {in_tok} (Cache Read: {cache_read}, Create: {cache_creation}) | "
+                    f"Output: {out_tok} | Total In/Out: {tot_tok} | Tools: {tool_names}"
+                )
 
             return {
                 "answer": answer,
